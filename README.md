@@ -1,57 +1,74 @@
-# Project Name
+# ACI Availability Zone (Preview)
 
-(short, 1-3 sentenced, description of the project)
+## Deploy an Azure Container Instances (ACI) container group in an availability zone (preview)
 
-## Features
+An availability zone is a physically separate zone in an Azure region. You can
+use availability zones to protect your containerized applications from an
+unlikely failure or loss of an entire data center. Azure Container Instances
+(ACI) supports zonal container group deployments, meaning the instance is pinned
+to a specific, self-selected availability zone. The availability zone is
+specified at the container group level. Containers within a container group
+cannot have unique availability zones. To change your container group's
+availability zone, you must delete the container group and create another
+container group with the new availability zone.
 
-This project framework provides the following features:
+## Components
 
-* Feature 1
-* Feature 2
-* ...
+![image](https://github.com/sopacifi/aci-availability-zones/blob/main/diagram.png)
 
-## Getting Started
+## Prerequisites
 
-### Prerequisites
+The following tools are required before using this example:
 
-(ideally very short, if any)
+- Azure CLI, version 2.30.0 or later
 
-- OS
-- Library version
-- ...
+Login to `az` and select your subscription (if necessary):
 
-### Installation
+```sh
+az login
+az account set --subscription "YOUR_SUBSCRIPTION_ID"
+```
 
-(ideally very short)
+## Deploy with Bicep
 
-- npm install [package name]
-- mvn install
-- ...
+First, copy the `main.parameters.sample.json` file to `main.parameters.json`.
+Then, update the values of `containerGroupBaseName` and `trafficManagerName` to
+something unique.
 
-### Quickstart
-(Add steps to get up and running quickly)
+Next, create the resource group that you will be deploying into:
 
-1. git clone [repository clone url]
-2. cd [repository name]
-3. ...
+```sh
+# Change location and resource-group to your preferred values
+az group create --location eastus --resource-group rg-your-resource-group-name
+```
 
+Finally, deploy the bicep template with `az`:
 
-## Demo
+```sh
+az deployment group create -n DeployingAciToMultipleAvailabilityZones --resource-group rg-your-resource-group-name --template-file main.bicep --parameters main.parameters.json
+```
 
-A demo app is included to show how to use the project.
+Wait for the deployment to finish, then check the Azure Portal for the status of
+the resources.
 
-To run the demo, follow these steps:
+## Deploy using Bash script
 
-(Add steps to start up the demo)
+Open a bash session and execute the following steps
 
-1.
-2.
-3.
+- Open the file `aci-availability-zones.sh` edit all the variables with your
+  unique values.
+- Save and close.
 
-## Resources
+```sh
+#Run the following command
+sh aci-availability-zones.sh
+```
 
-(Any additional resources or related projects)
+Wait for the deployment to finish, then check the Azure Portal for the status of
+the resources.
 
-- Link to supporting information
-- Link to similar sample
-- ...
+## More Information
+
+For more information, see the following Microsoft Docs:
+
+- [Deploy an Azure Container Instances (ACI) container group in an availability zone (preview)](https://docs.microsoft.com/azure/container-instances/availability-zones)
